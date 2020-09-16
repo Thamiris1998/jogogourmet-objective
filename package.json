@@ -1,0 +1,14 @@
+{
+  "name": "jogogourmet",
+  "version": "1.0.0",
+  "description": "jogo gourmet",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Thamiris Vasconsellos Lopes",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^10.1.2"
+  }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo Gourmet</title>
+</head>
+<body>
+    <div class="container" id="initial">
+        <p>Pense em um prato que você gosta!</p>
+        <button onclick="startGame('initial')">Ok</button>
+    </div>
+
+    <div class="container" id="questions" style="display: none;">
+        <div id="question"></div>
+        <br>
+        <button onclick="VerifyTags(true)">Sim</button>
+        <button onclick="VerifyTags(false)">Não</button>
+    </div>
+
+    <div class="container" id="thinkFood" style="display: none;">
+        <div>Qual prato você pensou?</div>
+        <br>
+        <input id="nameFood" type="text" />
+        <br>
+        <button onclick="plateAsked()">OK</button>
+    </div>
+
+    <div class="container" id="loveFoodQuestion" style="display: none;">
+        <div id="loveFood"></div>
+        <br>
+        <input id="aswerFood" type="text" />
+        <br>
+        <button onclick="finishGame()">OK</button>
+    </div>
+
+    <div class="container" id="incorrect" style="display: none;">
+        <p>Desisto!</p>
+        <button onclick="startGame('incorrect')">Restart</button>
+    </div>
+
+    <div class="container" id="correct" style="display: none;">
+        <p>Acertei de novo!</p>
+        <button onclick="startGame('correct')">Restart</button>
+    </div>
+
+    <script type="text/javascript">
+        let phrasesQuestions = []
+
+        function plateAsked() {
+            let thinkPlate = document.getElementById('nameFood').value
+            let loveFood = document.getElementById("loveFood")
+            loveFood.innerHTML = thinkPlate + " é_______________mas bolo de chocolate não."
+            offDisplay('thinkFood')
+            onDisplay('loveFoodQuestion')
+        }
+
+        function finishGame() {
+            let aswerFood = document.getElementById('aswerFood').value
+            phrasesQuestions.push("O prato que você pensou é " + aswerFood + "?")
+            tag('O prato que você pensou é massa?')
+            offDisplay('loveFoodQuestion')
+            onDisplay('incorrect')
+            document.getElementById('aswerFood').value = ""
+            document.getElementById('nameFood').value = ""
+        }
+
+        function startGame(value) {
+            offDisplay(value)
+            tag('O prato que você pensou é massa?')
+            onDisplay('questions')
+        }
+
+        function offDisplay(value) {
+            document.getElementById(value).style.display = 'none'
+        }
+
+        function onDisplay(value) {
+            document.getElementById(value).style.display = 'block'
+        }
+
+        function tag(value) {
+            let question = document.getElementById("question")
+            question.innerHTML = value
+        }
+
+        function VerifyTags(value) {
+            let question = document.getElementById('question').innerHTML
+
+            if ("O prato que você pensou é massa?" == question && value == true) {
+                tag('O prato que você pensou é lasanha?')
+            } else if ("O prato que você pensou é massa?" == question && value == false) {
+                tag('O prato que você pensou é bolo de chocolate?')
+            } else if ("O prato que você pensou é lasanha?" == question && value == true) {
+                offDisplay('questions')
+                onDisplay('correct')
+            } else if ("O prato que você pensou é lasanha?" == question && value == false) {
+                offDisplay('questions')
+                onDisplay('incorrect')
+            } else if ("O prato que você pensou é bolo de chocolate?" == question && value == true) {
+                offDisplay('questions')
+                onDisplay('correct')
+            } else {
+                offDisplay('questions')
+                if (phrasesQuestions.includes(question) && value == false) {
+
+                    let index = phrasesQuestions.indexOf(question)
+                    if (index == phrasesQuestions.length - 1) {
+                        onDisplay('thinkFood')
+                    } else {
+                        tag(phrasesQuestions[index + 1])
+                        onDisplay('questions')
+                    }
+                } else if (Object.keys(phrasesQuestions).length != 0) {
+                    tag(phrasesQuestions[0])
+                    onDisplay('questions')
+                } else if (Object.keys(phrasesQuestions).length == 0) {
+                    onDisplay('thinkFood')
+                } else {
+                    offDisplay('questions')
+                    onDisplay('incorrect')
+                }
+            }
+        }
+    </script>
+</body>
+</html>
